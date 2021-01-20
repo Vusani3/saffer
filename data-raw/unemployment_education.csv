@@ -1,4 +1,6 @@
-﻿Education;Year;Quarter;Unemployment Rate
+#http://www.statssa.gov.za/publications/P0211/P02113rdQuarter2020.pdf
+
+Education;Year;Quarter;Unemployment Rate
 Less than matric;2012;Jul-Sep;29,8
 Matric;2012;Jul-Sep;26,6
 Graduates;2012;Jul-Sep;4,9
