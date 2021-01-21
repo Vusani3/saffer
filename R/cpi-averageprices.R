@@ -1,9 +1,10 @@
 #' CPI average prices in South Africa
 #'
-#' @format A data frame with 3 columns:
+#' @format A data frame with 4 columns:
 #' \describe{
 #'  \item{product}{}
-#'  \item{date}
+#'  \item{year}
+#'  \item{month}
 #'  \item{price}
 #' }
 #'
