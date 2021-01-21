@@ -5,6 +5,7 @@ unemployment_gender <- read_delim(
     "data-raw",
     "unemployment-gender.csv"
     ),
+  locale=locale(decimal_mark = ","),
   delim = ";",
   comment = "#"
   )

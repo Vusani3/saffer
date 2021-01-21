@@ -5,6 +5,7 @@ unemployment_education <- read_delim(
     "data-raw",
     "unemployment-education.csv"
     ),
+  locale = locale(decimal_mark = ","),
   delim = ";",
   comment = "#"
   )
