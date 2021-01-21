@@ -1,13 +1,12 @@
-library(dplyr)
 library(readr)
 
 unemployment_gender <- read_delim(
   file.path(
     "data-raw",
-    "unemployment_gender.csv"
+    "unemployment-gender.csv"
     ),
-  ";",
-  skip = 2,
+  delim = ";",
+  comment = "#"
   )
 
 usethis::use_data(unemployment_gender, overwrite = TRUE)
