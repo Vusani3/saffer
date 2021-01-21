@@ -1,6 +1,6 @@
 # http://www.statssa.gov.za/publications/P0211/P02113rdQuarter2020.pdf
 #
-gender ;year;quarter ;unemployment rate
+gender;year;quarter;unemployment rate
 Women;2012;Jul-Sep;27,5
 Men;2012;Jul-Sep;23,3
 RSA;2012;Jul-Sep;25,2
