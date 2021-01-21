@@ -1,24 +1,27 @@
-library(httr)
-library(purrr)
+library(dplyr)
+library(readr)
+library(tidyverse)
 
-result <- GET('https://api.worldbank.org/v2/countries/ZA/indicators/SL.UEM.TOTL.ZS?per_page=10000&format=JSON')
+cpi_averageprices_allurban <- read.csv(
+  file.path(
+    "data-raw",
+    "CPI_averageprices_allurban.csv"
+    ),
+  sep=";",
+  dec=",",
+  na.strings='..',
+  comment = "#")
 
-content <- content(result)
+cpi_averageprices_allurban <- cpi_averageprices_allurban[complete.cases(cpi_averageprices_allurban$H04), ]
 
-metadata <- content[[1]]
-data <- content[[2]]
+cpi_averageprices_urban <- select(cpi_averageprices_allurban,
+                                  -c("H01","H02","H03","H05","H06","H07"))
 
-extract_data_year <- function(datum) {
-  tibble(
-    country_id = datum$country$id,
-    country_iso3 = datum$countryiso3code,
-    country_name = datum$country$value,
-    year = as.integer(datum$date),
-    unemployed_percent = ifelse(is.null(datum$value), NA, datum$value)
-  )
-}
+cpi_averageprices_urban <- cpi_averageprices_urban %>%
+  unite("product",H04:H08, remove = TRUE)
 
-unemployment_sa <- map_dfr(data, extract_data_year) %>%
-  filter(!is.na(unemployed_percent))
+cpi_averageprices <- cpi_averageprices_urban %>%
+  pivot_longer(-product,
+               names_to = "date", values_to = "price")
 
-usethis::use_data(unemployment_sa, overwrite = TRUE)
+usethis::use_data(cpi_averageprices, overwrite = TRUE)

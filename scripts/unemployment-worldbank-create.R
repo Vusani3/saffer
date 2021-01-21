@@ -1,35 +1,23 @@
-library(httr)
+library(purrr)
 
-# Get API response --------------------------------------------------------
-res <- GET('https://api.worldbank.org/v2/countries/ZA/indicators/SL.UEM.TOTL.ZS?per_page=10000&format=JSON')
+result <- GET('https://api.worldbank.org/v2/countries/ZA/indicators/SL.UEM.TOTL.ZS?per_page=10000&format=JSON')
 
-# Get content -------------------------------------------------------------
-content <- content(res)
+content <- content(result)
 
-# Create dataframe --------------------------------------------------------
-unemployment_sa <- data.frame()
+metadata <- content[[1]]
+data <- content[[2]]
 
-for(i in 1:length(content[[2]])){
-
-  x <- c(content[[2]][[i]]['date'][[1]])
-
-  y <- c(content[[2]][[i]]['value'][[1]])
-
-  check <- length(y)
-
-  if(check == 0){
-
-    y = "Missing"
-
-  } else{
-
-    y
-
-  }
-  unemployment_data <- data.frame(year = as.numeric(x),  "unemployment_rate" = y)
-
-  unemployment_sa <- rbind(unemployment_sa, unemployment_data)
-
+extract_data_year <- function(datum) {
+  tibble(
+    country_id = datum$country$id,
+    country_iso3 = datum$countryiso3code,
+    country_name = datum$country$value,
+    year = as.integer(datum$date),
+    unemployed_percent = ifelse(is.null(datum$value), NA, datum$value)
+  )
 }
+
+unemployment_sa <- map_dfr(data, extract_data_year) %>%
+  filter(!is.na(unemployed_percent))
 
 usethis::use_data(unemployment_sa, overwrite = TRUE)
